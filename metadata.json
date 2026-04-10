@@ -1,0 +1,5 @@
+{
+  "name": "OurPrompt",
+  "description": "A cross-platform desktop application for managing and testing AI prompts. Built with Electron, React, and Gemini API.",
+  "requestFramePermissions": []
+}

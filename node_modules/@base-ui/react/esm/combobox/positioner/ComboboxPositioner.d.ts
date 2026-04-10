@@ -1,0 +1,35 @@
+import * as React from 'react';
+import { type Side, type Align, type UseAnchorPositioningSharedParameters } from "../../utils/useAnchorPositioning.js";
+import type { BaseUIComponentProps } from "../../utils/types.js";
+/**
+ * Positions the popup against the trigger.
+ * Renders a `<div>` element.
+ */
+export declare const ComboboxPositioner: React.ForwardRefExoticComponent<Omit<ComboboxPositionerProps, "ref"> & React.RefAttributes<HTMLDivElement>>;
+export interface ComboboxPositionerState {
+  /**
+   * Whether the popup is currently open.
+   */
+  open: boolean;
+  /**
+   * The side of the anchor the component is placed on.
+   */
+  side: Side;
+  /**
+   * The alignment of the component relative to the anchor.
+   */
+  align: Align;
+  /**
+   * Whether the anchor element is hidden.
+   */
+  anchorHidden: boolean;
+  /**
+   * Whether there are no items to display.
+   */
+  empty: boolean;
+}
+export interface ComboboxPositionerProps extends UseAnchorPositioningSharedParameters, BaseUIComponentProps<'div', ComboboxPositionerState> {}
+export declare namespace ComboboxPositioner {
+  type State = ComboboxPositionerState;
+  type Props = ComboboxPositionerProps;
+}

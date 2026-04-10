@@ -1,0 +1,675 @@
+{
+  "name": "@base-ui/react",
+  "version": "1.3.0",
+  "author": "MUI Team",
+  "description": "Base UI is a library of headless ('unstyled') React components and low-level hooks. You gain complete control over your app's CSS and accessibility features.",
+  "keywords": [
+    "react",
+    "react-component",
+    "mui",
+    "unstyled",
+    "a11y"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mui/base-ui.git",
+    "directory": "packages/react"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mui/base-ui/issues"
+  },
+  "homepage": "https://base-ui.com",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/mui-org"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "@babel/runtime": "^7.28.6",
+    "@floating-ui/react-dom": "^2.1.8",
+    "@floating-ui/utils": "^0.2.11",
+    "tabbable": "^6.4.0",
+    "use-sync-external-store": "^1.6.0",
+    "@base-ui/utils": "0.2.6"
+  },
+  "peerDependencies": {
+    "@types/react": "^17 || ^18 || ^19",
+    "react": "^17 || ^18 || ^19",
+    "react-dom": "^17 || ^18 || ^19"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
+      },
+      "require": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      },
+      "default": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
+      }
+    },
+    "./accordion": {
+      "import": {
+        "types": "./esm/accordion/index.d.ts",
+        "default": "./esm/accordion/index.js"
+      },
+      "require": {
+        "types": "./accordion/index.d.ts",
+        "default": "./accordion/index.js"
+      },
+      "default": {
+        "types": "./esm/accordion/index.d.ts",
+        "default": "./esm/accordion/index.js"
+      }
+    },
+    "./alert-dialog": {
+      "import": {
+        "types": "./esm/alert-dialog/index.d.ts",
+        "default": "./esm/alert-dialog/index.js"
+      },
+      "require": {
+        "types": "./alert-dialog/index.d.ts",
+        "default": "./alert-dialog/index.js"
+      },
+      "default": {
+        "types": "./esm/alert-dialog/index.d.ts",
+        "default": "./esm/alert-dialog/index.js"
+      }
+    },
+    "./autocomplete": {
+      "import": {
+        "types": "./esm/autocomplete/index.d.ts",
+        "default": "./esm/autocomplete/index.js"
+      },
+      "require": {
+        "types": "./autocomplete/index.d.ts",
+        "default": "./autocomplete/index.js"
+      },
+      "default": {
+        "types": "./esm/autocomplete/index.d.ts",
+        "default": "./esm/autocomplete/index.js"
+      }
+    },
+    "./avatar": {
+      "import": {
+        "types": "./esm/avatar/index.d.ts",
+        "default": "./esm/avatar/index.js"
+      },
+      "require": {
+        "types": "./avatar/index.d.ts",
+        "default": "./avatar/index.js"
+      },
+      "default": {
+        "types": "./esm/avatar/index.d.ts",
+        "default": "./esm/avatar/index.js"
+      }
+    },
+    "./button": {
+      "import": {
+        "types": "./esm/button/index.d.ts",
+        "default": "./esm/button/index.js"
+      },
+      "require": {
+        "types": "./button/index.d.ts",
+        "default": "./button/index.js"
+      },
+      "default": {
+        "types": "./esm/button/index.d.ts",
+        "default": "./esm/button/index.js"
+      }
+    },
+    "./checkbox": {
+      "import": {
+        "types": "./esm/checkbox/index.d.ts",
+        "default": "./esm/checkbox/index.js"
+      },
+      "require": {
+        "types": "./checkbox/index.d.ts",
+        "default": "./checkbox/index.js"
+      },
+      "default": {
+        "types": "./esm/checkbox/index.d.ts",
+        "default": "./esm/checkbox/index.js"
+      }
+    },
+    "./checkbox-group": {
+      "import": {
+        "types": "./esm/checkbox-group/index.d.ts",
+        "default": "./esm/checkbox-group/index.js"
+      },
+      "require": {
+        "types": "./checkbox-group/index.d.ts",
+        "default": "./checkbox-group/index.js"
+      },
+      "default": {
+        "types": "./esm/checkbox-group/index.d.ts",
+        "default": "./esm/checkbox-group/index.js"
+      }
+    },
+    "./collapsible": {
+      "import": {
+        "types": "./esm/collapsible/index.d.ts",
+        "default": "./esm/collapsible/index.js"
+      },
+      "require": {
+        "types": "./collapsible/index.d.ts",
+        "default": "./collapsible/index.js"
+      },
+      "default": {
+        "types": "./esm/collapsible/index.d.ts",
+        "default": "./esm/collapsible/index.js"
+      }
+    },
+    "./combobox": {
+      "import": {
+        "types": "./esm/combobox/index.d.ts",
+        "default": "./esm/combobox/index.js"
+      },
+      "require": {
+        "types": "./combobox/index.d.ts",
+        "default": "./combobox/index.js"
+      },
+      "default": {
+        "types": "./esm/combobox/index.d.ts",
+        "default": "./esm/combobox/index.js"
+      }
+    },
+    "./csp-provider": {
+      "import": {
+        "types": "./esm/csp-provider/index.d.ts",
+        "default": "./esm/csp-provider/index.js"
+      },
+      "require": {
+        "types": "./csp-provider/index.d.ts",
+        "default": "./csp-provider/index.js"
+      },
+      "default": {
+        "types": "./esm/csp-provider/index.d.ts",
+        "default": "./esm/csp-provider/index.js"
+      }
+    },
+    "./context-menu": {
+      "import": {
+        "types": "./esm/context-menu/index.d.ts",
+        "default": "./esm/context-menu/index.js"
+      },
+      "require": {
+        "types": "./context-menu/index.d.ts",
+        "default": "./context-menu/index.js"
+      },
+      "default": {
+        "types": "./esm/context-menu/index.d.ts",
+        "default": "./esm/context-menu/index.js"
+      }
+    },
+    "./dialog": {
+      "import": {
+        "types": "./esm/dialog/index.d.ts",
+        "default": "./esm/dialog/index.js"
+      },
+      "require": {
+        "types": "./dialog/index.d.ts",
+        "default": "./dialog/index.js"
+      },
+      "default": {
+        "types": "./esm/dialog/index.d.ts",
+        "default": "./esm/dialog/index.js"
+      }
+    },
+    "./direction-provider": {
+      "import": {
+        "types": "./esm/direction-provider/index.d.ts",
+        "default": "./esm/direction-provider/index.js"
+      },
+      "require": {
+        "types": "./direction-provider/index.d.ts",
+        "default": "./direction-provider/index.js"
+      },
+      "default": {
+        "types": "./esm/direction-provider/index.d.ts",
+        "default": "./esm/direction-provider/index.js"
+      }
+    },
+    "./drawer": {
+      "import": {
+        "types": "./esm/drawer/index.d.ts",
+        "default": "./esm/drawer/index.js"
+      },
+      "require": {
+        "types": "./drawer/index.d.ts",
+        "default": "./drawer/index.js"
+      },
+      "default": {
+        "types": "./esm/drawer/index.d.ts",
+        "default": "./esm/drawer/index.js"
+      }
+    },
+    "./field": {
+      "import": {
+        "types": "./esm/field/index.d.ts",
+        "default": "./esm/field/index.js"
+      },
+      "require": {
+        "types": "./field/index.d.ts",
+        "default": "./field/index.js"
+      },
+      "default": {
+        "types": "./esm/field/index.d.ts",
+        "default": "./esm/field/index.js"
+      }
+    },
+    "./fieldset": {
+      "import": {
+        "types": "./esm/fieldset/index.d.ts",
+        "default": "./esm/fieldset/index.js"
+      },
+      "require": {
+        "types": "./fieldset/index.d.ts",
+        "default": "./fieldset/index.js"
+      },
+      "default": {
+        "types": "./esm/fieldset/index.d.ts",
+        "default": "./esm/fieldset/index.js"
+      }
+    },
+    "./form": {
+      "import": {
+        "types": "./esm/form/index.d.ts",
+        "default": "./esm/form/index.js"
+      },
+      "require": {
+        "types": "./form/index.d.ts",
+        "default": "./form/index.js"
+      },
+      "default": {
+        "types": "./esm/form/index.d.ts",
+        "default": "./esm/form/index.js"
+      }
+    },
+    "./input": {
+      "import": {
+        "types": "./esm/input/index.d.ts",
+        "default": "./esm/input/index.js"
+      },
+      "require": {
+        "types": "./input/index.d.ts",
+        "default": "./input/index.js"
+      },
+      "default": {
+        "types": "./esm/input/index.d.ts",
+        "default": "./esm/input/index.js"
+      }
+    },
+    "./menu": {
+      "import": {
+        "types": "./esm/menu/index.d.ts",
+        "default": "./esm/menu/index.js"
+      },
+      "require": {
+        "types": "./menu/index.d.ts",
+        "default": "./menu/index.js"
+      },
+      "default": {
+        "types": "./esm/menu/index.d.ts",
+        "default": "./esm/menu/index.js"
+      }
+    },
+    "./menubar": {
+      "import": {
+        "types": "./esm/menubar/index.d.ts",
+        "default": "./esm/menubar/index.js"
+      },
+      "require": {
+        "types": "./menubar/index.d.ts",
+        "default": "./menubar/index.js"
+      },
+      "default": {
+        "types": "./esm/menubar/index.d.ts",
+        "default": "./esm/menubar/index.js"
+      }
+    },
+    "./merge-props": {
+      "import": {
+        "types": "./esm/merge-props/index.d.ts",
+        "default": "./esm/merge-props/index.js"
+      },
+      "require": {
+        "types": "./merge-props/index.d.ts",
+        "default": "./merge-props/index.js"
+      },
+      "default": {
+        "types": "./esm/merge-props/index.d.ts",
+        "default": "./esm/merge-props/index.js"
+      }
+    },
+    "./meter": {
+      "import": {
+        "types": "./esm/meter/index.d.ts",
+        "default": "./esm/meter/index.js"
+      },
+      "require": {
+        "types": "./meter/index.d.ts",
+        "default": "./meter/index.js"
+      },
+      "default": {
+        "types": "./esm/meter/index.d.ts",
+        "default": "./esm/meter/index.js"
+      }
+    },
+    "./navigation-menu": {
+      "import": {
+        "types": "./esm/navigation-menu/index.d.ts",
+        "default": "./esm/navigation-menu/index.js"
+      },
+      "require": {
+        "types": "./navigation-menu/index.d.ts",
+        "default": "./navigation-menu/index.js"
+      },
+      "default": {
+        "types": "./esm/navigation-menu/index.d.ts",
+        "default": "./esm/navigation-menu/index.js"
+      }
+    },
+    "./number-field": {
+      "import": {
+        "types": "./esm/number-field/index.d.ts",
+        "default": "./esm/number-field/index.js"
+      },
+      "require": {
+        "types": "./number-field/index.d.ts",
+        "default": "./number-field/index.js"
+      },
+      "default": {
+        "types": "./esm/number-field/index.d.ts",
+        "default": "./esm/number-field/index.js"
+      }
+    },
+    "./popover": {
+      "import": {
+        "types": "./esm/popover/index.d.ts",
+        "default": "./esm/popover/index.js"
+      },
+      "require": {
+        "types": "./popover/index.d.ts",
+        "default": "./popover/index.js"
+      },
+      "default": {
+        "types": "./esm/popover/index.d.ts",
+        "default": "./esm/popover/index.js"
+      }
+    },
+    "./preview-card": {
+      "import": {
+        "types": "./esm/preview-card/index.d.ts",
+        "default": "./esm/preview-card/index.js"
+      },
+      "require": {
+        "types": "./preview-card/index.d.ts",
+        "default": "./preview-card/index.js"
+      },
+      "default": {
+        "types": "./esm/preview-card/index.d.ts",
+        "default": "./esm/preview-card/index.js"
+      }
+    },
+    "./progress": {
+      "import": {
+        "types": "./esm/progress/index.d.ts",
+        "default": "./esm/progress/index.js"
+      },
+      "require": {
+        "types": "./progress/index.d.ts",
+        "default": "./progress/index.js"
+      },
+      "default": {
+        "types": "./esm/progress/index.d.ts",
+        "default": "./esm/progress/index.js"
+      }
+    },
+    "./radio": {
+      "import": {
+        "types": "./esm/radio/index.d.ts",
+        "default": "./esm/radio/index.js"
+      },
+      "require": {
+        "types": "./radio/index.d.ts",
+        "default": "./radio/index.js"
+      },
+      "default": {
+        "types": "./esm/radio/index.d.ts",
+        "default": "./esm/radio/index.js"
+      }
+    },
+    "./radio-group": {
+      "import": {
+        "types": "./esm/radio-group/index.d.ts",
+        "default": "./esm/radio-group/index.js"
+      },
+      "require": {
+        "types": "./radio-group/index.d.ts",
+        "default": "./radio-group/index.js"
+      },
+      "default": {
+        "types": "./esm/radio-group/index.d.ts",
+        "default": "./esm/radio-group/index.js"
+      }
+    },
+    "./scroll-area": {
+      "import": {
+        "types": "./esm/scroll-area/index.d.ts",
+        "default": "./esm/scroll-area/index.js"
+      },
+      "require": {
+        "types": "./scroll-area/index.d.ts",
+        "default": "./scroll-area/index.js"
+      },
+      "default": {
+        "types": "./esm/scroll-area/index.d.ts",
+        "default": "./esm/scroll-area/index.js"
+      }
+    },
+    "./select": {
+      "import": {
+        "types": "./esm/select/index.d.ts",
+        "default": "./esm/select/index.js"
+      },
+      "require": {
+        "types": "./select/index.d.ts",
+        "default": "./select/index.js"
+      },
+      "default": {
+        "types": "./esm/select/index.d.ts",
+        "default": "./esm/select/index.js"
+      }
+    },
+    "./separator": {
+      "import": {
+        "types": "./esm/separator/index.d.ts",
+        "default": "./esm/separator/index.js"
+      },
+      "require": {
+        "types": "./separator/index.d.ts",
+        "default": "./separator/index.js"
+      },
+      "default": {
+        "types": "./esm/separator/index.d.ts",
+        "default": "./esm/separator/index.js"
+      }
+    },
+    "./slider": {
+      "import": {
+        "types": "./esm/slider/index.d.ts",
+        "default": "./esm/slider/index.js"
+      },
+      "require": {
+        "types": "./slider/index.d.ts",
+        "default": "./slider/index.js"
+      },
+      "default": {
+        "types": "./esm/slider/index.d.ts",
+        "default": "./esm/slider/index.js"
+      }
+    },
+    "./switch": {
+      "import": {
+        "types": "./esm/switch/index.d.ts",
+        "default": "./esm/switch/index.js"
+      },
+      "require": {
+        "types": "./switch/index.d.ts",
+        "default": "./switch/index.js"
+      },
+      "default": {
+        "types": "./esm/switch/index.d.ts",
+        "default": "./esm/switch/index.js"
+      }
+    },
+    "./tabs": {
+      "import": {
+        "types": "./esm/tabs/index.d.ts",
+        "default": "./esm/tabs/index.js"
+      },
+      "require": {
+        "types": "./tabs/index.d.ts",
+        "default": "./tabs/index.js"
+      },
+      "default": {
+        "types": "./esm/tabs/index.d.ts",
+        "default": "./esm/tabs/index.js"
+      }
+    },
+    "./toast": {
+      "import": {
+        "types": "./esm/toast/index.d.ts",
+        "default": "./esm/toast/index.js"
+      },
+      "require": {
+        "types": "./toast/index.d.ts",
+        "default": "./toast/index.js"
+      },
+      "default": {
+        "types": "./esm/toast/index.d.ts",
+        "default": "./esm/toast/index.js"
+      }
+    },
+    "./toggle": {
+      "import": {
+        "types": "./esm/toggle/index.d.ts",
+        "default": "./esm/toggle/index.js"
+      },
+      "require": {
+        "types": "./toggle/index.d.ts",
+        "default": "./toggle/index.js"
+      },
+      "default": {
+        "types": "./esm/toggle/index.d.ts",
+        "default": "./esm/toggle/index.js"
+      }
+    },
+    "./toggle-group": {
+      "import": {
+        "types": "./esm/toggle-group/index.d.ts",
+        "default": "./esm/toggle-group/index.js"
+      },
+      "require": {
+        "types": "./toggle-group/index.d.ts",
+        "default": "./toggle-group/index.js"
+      },
+      "default": {
+        "types": "./esm/toggle-group/index.d.ts",
+        "default": "./esm/toggle-group/index.js"
+      }
+    },
+    "./toolbar": {
+      "import": {
+        "types": "./esm/toolbar/index.d.ts",
+        "default": "./esm/toolbar/index.js"
+      },
+      "require": {
+        "types": "./toolbar/index.d.ts",
+        "default": "./toolbar/index.js"
+      },
+      "default": {
+        "types": "./esm/toolbar/index.d.ts",
+        "default": "./esm/toolbar/index.js"
+      }
+    },
+    "./tooltip": {
+      "import": {
+        "types": "./esm/tooltip/index.d.ts",
+        "default": "./esm/tooltip/index.js"
+      },
+      "require": {
+        "types": "./tooltip/index.d.ts",
+        "default": "./tooltip/index.js"
+      },
+      "default": {
+        "types": "./esm/tooltip/index.d.ts",
+        "default": "./esm/tooltip/index.js"
+      }
+    },
+    "./types": {
+      "import": {
+        "types": "./esm/types/index.d.ts",
+        "default": "./esm/types/index.js"
+      },
+      "require": {
+        "types": "./types/index.d.ts",
+        "default": "./types/index.js"
+      },
+      "default": {
+        "types": "./esm/types/index.d.ts",
+        "default": "./esm/types/index.js"
+      }
+    },
+    "./unstable-use-media-query": {
+      "import": {
+        "types": "./esm/unstable-use-media-query/index.d.ts",
+        "default": "./esm/unstable-use-media-query/index.js"
+      },
+      "require": {
+        "types": "./unstable-use-media-query/index.d.ts",
+        "default": "./unstable-use-media-query/index.js"
+      },
+      "default": {
+        "types": "./esm/unstable-use-media-query/index.d.ts",
+        "default": "./esm/unstable-use-media-query/index.js"
+      }
+    },
+    "./use-render": {
+      "import": {
+        "types": "./esm/use-render/index.d.ts",
+        "default": "./esm/use-render/index.js"
+      },
+      "require": {
+        "types": "./use-render/index.d.ts",
+        "default": "./use-render/index.js"
+      },
+      "default": {
+        "types": "./esm/use-render/index.d.ts",
+        "default": "./esm/use-render/index.js"
+      }
+    },
+    "./esm": null
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts"
+}

@@ -1,0 +1,18 @@
+[package]
+name = "ourprompt"
+version = "0.0.0"
+description = "OurPrompt desktop app built with Tauri"
+authors = ["OurPrompt"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+strip = true

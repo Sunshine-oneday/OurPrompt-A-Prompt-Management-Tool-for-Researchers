@@ -1,0 +1,86 @@
+const { logger } = require('./../../shared/logger')
+
+const conventions = require('./../../lib/helpers/conventions')
+const escape = require('./../../lib/helpers/escape')
+const catchAndLog = require('./../../lib/helpers/catchAndLog')
+const createSpinner = require('../../lib/helpers/createSpinner')
+const Session = require('../../db/session')
+const Get = require('./../../lib/services/get')
+
+async function get (key) {
+  const options = this.opts()
+  const spinner = await createSpinner({ ...options, text: 'decrypting' })
+
+  logger.debug(`options: ${JSON.stringify(options)}`)
+  if (key) {
+    logger.debug(`key: ${key}`)
+  }
+
+  const prettyPrint = options.prettyPrint || options.pp
+  const ignore = options.ignore || []
+
+  let envs = []
+  // handle shorthand conventions - like --convention=nextjs
+  if (options.convention) {
+    envs = conventions(options.convention).concat(this.envs)
+  } else {
+    envs = this.envs
+  }
+
+  try {
+    const sesh = new Session()
+    const noOps = options.ops === false || (await sesh.noOps())
+    const { parsed, errors } = await new Get(key, envs, options.overload, options.all, options.envKeysFile, noOps).run()
+
+    for (const error of errors || []) {
+      if (options.strict) throw error // throw immediately if strict
+
+      if (ignore.includes(error.code)) {
+        continue // ignore error
+      }
+
+      logger.error(error.messageWithHelp)
+    }
+
+    if (spinner) spinner.stop()
+    if (key) {
+      const single = parsed[key]
+      if (single === undefined) {
+        console.log('')
+      } else {
+        console.log(single)
+      }
+    } else {
+      if (options.format === 'eval') {
+        let inline = ''
+        for (const [key, value] of Object.entries(parsed)) {
+          inline += `${key}=${escape(value)}\n`
+        }
+        inline = inline.trim()
+
+        console.log(inline)
+      } else if (options.format === 'shell') {
+        let inline = ''
+        for (const [key, value] of Object.entries(parsed)) {
+          inline += `${key}=${value} `
+        }
+        inline = inline.trim()
+
+        console.log(inline)
+      } else {
+        let space = 0
+        if (prettyPrint) {
+          space = 2
+        }
+
+        console.log(JSON.stringify(parsed, null, space))
+      }
+    }
+  } catch (error) {
+    if (spinner) spinner.stop()
+    catchAndLog(error)
+    process.exit(1)
+  }
+}
+
+module.exports = get

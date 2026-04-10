@@ -1,0 +1,46 @@
+{
+  "entities": {
+    "Prompt": {
+      "title": "Prompt",
+      "description": "A prompt template managed by the user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string", "description": "Display name of the prompt" },
+        "content": { "type": "string", "description": "The actual prompt text" },
+        "category": { 
+          "type": "string", 
+          "enum": ["ai-writing", "paper-reading", "literature-org", "review-synthesis", "other"],
+          "description": "The category this prompt belongs to"
+        },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "userId": { "type": "string", "description": "Owner of the prompt" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "content", "category", "userId"]
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "admin"] }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "/prompts/{promptId}": {
+      "schema": "Prompt",
+      "description": "Collection of user prompts"
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile data"
+    }
+  }
+}

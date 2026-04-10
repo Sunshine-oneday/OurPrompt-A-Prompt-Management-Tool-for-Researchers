@@ -1,0 +1,384 @@
+import { ReactStore, createSelector, createSelectorMemoized } from '@base-ui/utils/store';
+import { generateId } from '@base-ui/utils/generateId';
+import { ownerDocument } from '@base-ui/utils/owner';
+import { Timeout } from '@base-ui/utils/useTimeout';
+import { resolvePromiseOptions } from "./utils/resolvePromiseOptions.js";
+import { activeElement, contains, getTarget } from "../floating-ui-react/utils.js";
+import { isFocusVisible } from "./utils/focusVisible.js";
+const toastMapSelector = createSelectorMemoized(state => state.toasts, toasts => {
+  const map = new Map();
+  let visibleIndex = 0;
+  let offsetY = 0;
+  toasts.forEach((toast, toastIndex) => {
+    const isEnding = toast.transitionStatus === 'ending';
+    map.set(toast.id, {
+      value: toast,
+      domIndex: toastIndex,
+      visibleIndex: isEnding ? -1 : visibleIndex,
+      offsetY
+    });
+    offsetY += toast.height || 0;
+    if (!isEnding) {
+      visibleIndex += 1;
+    }
+  });
+  return map;
+});
+export const selectors = {
+  toasts: createSelector(state => state.toasts),
+  isEmpty: createSelector(state => state.toasts.length === 0),
+  toast: createSelector(toastMapSelector, (toastMap, id) => toastMap.get(id)?.value),
+  toastIndex: createSelector(toastMapSelector, (toastMap, id) => toastMap.get(id)?.domIndex ?? -1),
+  toastOffsetY: createSelector(toastMapSelector, (toastMap, id) => toastMap.get(id)?.offsetY ?? 0),
+  toastVisibleIndex: createSelector(toastMapSelector, (toastMap, id) => toastMap.get(id)?.visibleIndex ?? -1),
+  hovering: createSelector(state => state.hovering),
+  focused: createSelector(state => state.focused),
+  expanded: createSelector(state => state.hovering || state.focused),
+  expandedOrOutOfFocus: createSelector(state => state.hovering || state.focused || !state.isWindowFocused),
+  prevFocusElement: createSelector(state => state.prevFocusElement)
+};
+export class ToastStore extends ReactStore {
+  timers = new Map();
+  areTimersPaused = false;
+  constructor(initialState) {
+    super(initialState, {}, selectors);
+  }
+  setFocused(focused) {
+    this.set('focused', focused);
+  }
+  setHovering(hovering) {
+    this.set('hovering', hovering);
+  }
+  setIsWindowFocused(isWindowFocused) {
+    this.set('isWindowFocused', isWindowFocused);
+  }
+  setPrevFocusElement(prevFocusElement) {
+    this.set('prevFocusElement', prevFocusElement);
+  }
+  setViewport = viewport => {
+    this.set('viewport', viewport);
+  };
+  disposeEffect = () => {
+    return () => {
+      this.timers.forEach(timer => {
+        timer.timeout?.clear();
+      });
+      this.timers.clear();
+    };
+  };
+  removeToast(toastId) {
+    const index = selectors.toastIndex(this.state, toastId);
+    if (index === -1) {
+      return;
+    }
+    const toast = this.state.toasts[index];
+    toast?.onRemove?.();
+    const newToasts = [...this.state.toasts];
+    newToasts.splice(index, 1);
+    this.setToasts(newToasts);
+  }
+  addToast = toast => {
+    const {
+      toasts,
+      timeout,
+      limit
+    } = this.state;
+    const id = toast.id || generateId('toast');
+    const toastToAdd = {
+      ...toast,
+      id,
+      transitionStatus: 'starting'
+    };
+    const updatedToasts = [toastToAdd, ...toasts];
+    const activeToasts = updatedToasts.filter(t => t.transitionStatus !== 'ending');
+
+    // Mark oldest toasts for removal when over limit
+    if (activeToasts.length > limit) {
+      const excessCount = activeToasts.length - limit;
+      const oldestActiveToasts = activeToasts.slice(-excessCount);
+      const limitedIds = new Set(oldestActiveToasts.map(t => t.id));
+      this.setToasts(updatedToasts.map(t => {
+        const limited = limitedIds.has(t.id);
+        if (t.limited !== limited) {
+          return {
+            ...t,
+            limited
+          };
+        }
+        return t;
+      }));
+    } else {
+      this.setToasts(updatedToasts.map(t => t.limited ? {
+        ...t,
+        limited: false
+      } : t));
+    }
+    const duration = toastToAdd.timeout ?? timeout;
+    if (toastToAdd.type !== 'loading' && duration > 0) {
+      this.scheduleTimer(id, duration, () => this.closeToast(id));
+    }
+    if (selectors.expandedOrOutOfFocus(this.state)) {
+      this.pauseTimers();
+    }
+    return id;
+  };
+  updateToast = (id, updates) => {
+    this.updateToastInternal(id, updates);
+  };
+  updateToastInternal = (id, updates) => {
+    const {
+      timeout,
+      toasts
+    } = this.state;
+    const prevToast = selectors.toast(this.state, id) ?? null;
+    if (!prevToast) {
+      return;
+    }
+
+    // Ignore updates for toasts that are already closing.
+    // This prevents races where async updates (e.g. promise success/error)
+    // can block a dismissal from completing.
+    if (prevToast.transitionStatus === 'ending') {
+      return;
+    }
+    const nextToast = {
+      ...prevToast,
+      ...updates
+    };
+    this.setToasts(toasts.map(toast => toast.id === id ? {
+      ...toast,
+      ...updates
+    } : toast));
+    const nextTimeout = nextToast.timeout ?? timeout;
+    const prevTimeout = prevToast?.timeout ?? timeout;
+    const timeoutUpdated = Object.hasOwn(updates, 'timeout');
+    const shouldHaveTimer = nextToast.transitionStatus !== 'ending' && nextToast.type !== 'loading' && nextTimeout > 0;
+    const hasTimer = this.timers.has(id);
+    const timeoutChanged = prevTimeout !== nextTimeout;
+    const wasLoading = prevToast?.type === 'loading';
+    if (!shouldHaveTimer && hasTimer) {
+      const timer = this.timers.get(id);
+      timer?.timeout?.clear();
+      this.timers.delete(id);
+      return;
+    }
+
+    // Schedule or reschedule timer if needed
+    if (shouldHaveTimer && (!hasTimer || timeoutChanged || timeoutUpdated || wasLoading)) {
+      const timer = this.timers.get(id);
+      if (timer) {
+        timer.timeout?.clear();
+        this.timers.delete(id);
+      }
+      this.scheduleTimer(id, nextTimeout, () => this.closeToast(id));
+      if (selectors.expandedOrOutOfFocus(this.state)) {
+        this.pauseTimers();
+      }
+    }
+  };
+  closeToast = toastId => {
+    const closeAll = toastId === undefined;
+    const {
+      limit,
+      toasts
+    } = this.state;
+    let toastsToClose;
+    if (closeAll) {
+      toastsToClose = toasts;
+      this.timers.forEach(timer => {
+        timer.timeout?.clear();
+      });
+      this.timers.clear();
+    } else {
+      const toast = selectors.toast(this.state, toastId);
+      if (!toast) {
+        return;
+      }
+      toastsToClose = [toast];
+      const timer = this.timers.get(toastId);
+      if (timer?.timeout) {
+        timer.timeout.clear();
+        this.timers.delete(toastId);
+      }
+    }
+    let activeIndex = 0;
+    const newToasts = toasts.map(item => {
+      if (closeAll || item.id === toastId) {
+        return {
+          ...item,
+          transitionStatus: 'ending',
+          height: 0
+        };
+      }
+      if (item.transitionStatus === 'ending') {
+        return item;
+      }
+      const isLimited = activeIndex >= limit;
+      activeIndex += 1;
+      return item.limited !== isLimited ? {
+        ...item,
+        limited: isLimited
+      } : item;
+    });
+    const updates = {
+      toasts: newToasts
+    };
+    if (closeAll || toasts.length === 1) {
+      updates.hovering = false;
+      updates.focused = false;
+    }
+    this.update(updates);
+    toastsToClose.forEach(toast => {
+      if (toast.transitionStatus !== 'ending') {
+        toast.onClose?.();
+      }
+    });
+    this.handleFocusManagement(toastId);
+  };
+  promiseToast = (promiseValue, options) => {
+    // Create a loading toast (which does not auto-dismiss).
+    const loadingOptions = resolvePromiseOptions(options.loading);
+    const id = this.addToast({
+      ...loadingOptions,
+      type: 'loading'
+    });
+    const handledPromise = promiseValue.then(result => {
+      const successOptions = resolvePromiseOptions(options.success, result);
+      this.updateToast(id, {
+        ...successOptions,
+        type: 'success',
+        timeout: successOptions.timeout
+      });
+      return result;
+    }).catch(error => {
+      const errorOptions = resolvePromiseOptions(options.error, error);
+      this.updateToast(id, {
+        ...errorOptions,
+        type: 'error',
+        timeout: errorOptions.timeout
+      });
+      return Promise.reject(error);
+    });
+
+    // Private API used exclusively by `Manager` to handoff the promise
+    // back to the manager after it's handled here.
+    if ({}.hasOwnProperty.call(options, 'setPromise')) {
+      options.setPromise(handledPromise);
+    }
+    return handledPromise;
+  };
+  pauseTimers() {
+    if (this.areTimersPaused) {
+      return;
+    }
+    this.areTimersPaused = true;
+    this.timers.forEach(timer => {
+      if (timer.timeout) {
+        timer.timeout.clear();
+        const elapsed = Date.now() - timer.start;
+        const remaining = timer.delay - elapsed;
+        timer.remaining = remaining > 0 ? remaining : 0;
+      }
+    });
+  }
+  resumeTimers() {
+    if (!this.areTimersPaused) {
+      return;
+    }
+    this.areTimersPaused = false;
+    this.timers.forEach((timer, id) => {
+      timer.remaining = timer.remaining > 0 ? timer.remaining : timer.delay;
+      timer.timeout ??= Timeout.create();
+      timer.timeout.start(timer.remaining, () => {
+        this.timers.delete(id);
+        timer.callback();
+      });
+      timer.start = Date.now();
+    });
+  }
+  restoreFocusToPrevElement() {
+    this.state.prevFocusElement?.focus({
+      preventScroll: true
+    });
+  }
+  handleDocumentPointerDown = event => {
+    if (event.pointerType !== 'touch') {
+      return;
+    }
+    const target = getTarget(event);
+    if (contains(this.state.viewport, target)) {
+      return;
+    }
+    this.resumeTimers();
+    this.update({
+      hovering: false,
+      focused: false
+    });
+  };
+  scheduleTimer(id, delay, callback) {
+    const start = Date.now();
+    const shouldStartActive = !selectors.expandedOrOutOfFocus(this.state);
+    const currentTimeout = shouldStartActive ? Timeout.create() : undefined;
+    currentTimeout?.start(delay, () => {
+      this.timers.delete(id);
+      callback();
+    });
+    this.timers.set(id, {
+      timeout: currentTimeout,
+      start: shouldStartActive ? start : 0,
+      delay,
+      remaining: delay,
+      callback
+    });
+  }
+  setToasts(newToasts) {
+    const updates = {
+      toasts: newToasts
+    };
+    if (newToasts.length === 0) {
+      updates.hovering = false;
+      updates.focused = false;
+    }
+    this.update(updates);
+  }
+  handleFocusManagement(toastId) {
+    const activeEl = activeElement(ownerDocument(this.state.viewport));
+    if (!this.state.viewport || !contains(this.state.viewport, activeEl) || !isFocusVisible(activeEl)) {
+      return;
+    }
+    if (toastId === undefined) {
+      this.restoreFocusToPrevElement();
+      return;
+    }
+    const toasts = selectors.toasts(this.state);
+    const currentIndex = selectors.toastIndex(this.state, toastId);
+    let nextToast = null;
+
+    // Try to find the next toast that isn't animating out
+    let index = currentIndex + 1;
+    while (index < toasts.length) {
+      if (toasts[index].transitionStatus !== 'ending') {
+        nextToast = toasts[index];
+        break;
+      }
+      index += 1;
+    }
+
+    // Go backwards if no next toast is found
+    if (!nextToast) {
+      index = currentIndex - 1;
+      while (index >= 0) {
+        if (toasts[index].transitionStatus !== 'ending') {
+          nextToast = toasts[index];
+          break;
+        }
+        index -= 1;
+      }
+    }
+    if (nextToast) {
+      nextToast.ref?.current?.focus();
+    } else {
+      this.restoreFocusToPrevElement();
+    }
+  }
+}

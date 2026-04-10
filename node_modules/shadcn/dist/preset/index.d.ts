@@ -1,0 +1,35 @@
+declare const PRESET_BASES: readonly ["radix", "base"];
+declare const PRESET_STYLES: readonly ["nova", "vega", "maia", "lyra", "mira", "luma"];
+declare const PRESET_BASE_COLORS: readonly ["neutral", "stone", "zinc", "gray", "mauve", "olive", "mist", "taupe"];
+declare const PRESET_THEMES: readonly ["neutral", "stone", "zinc", "gray", "amber", "blue", "cyan", "emerald", "fuchsia", "green", "indigo", "lime", "orange", "pink", "purple", "red", "rose", "sky", "teal", "violet", "yellow", "mauve", "olive", "mist", "taupe"];
+declare const PRESET_CHART_COLORS: readonly ["neutral", "stone", "zinc", "gray", "amber", "blue", "cyan", "emerald", "fuchsia", "green", "indigo", "lime", "orange", "pink", "purple", "red", "rose", "sky", "teal", "violet", "yellow", "mauve", "olive", "mist", "taupe"];
+declare const V1_CHART_COLOR_MAP: Record<string, string>;
+declare const PRESET_ICON_LIBRARIES: readonly ["lucide", "hugeicons", "tabler", "phosphor", "remixicon"];
+declare const PRESET_FONTS: readonly ["inter", "noto-sans", "nunito-sans", "figtree", "roboto", "raleway", "dm-sans", "public-sans", "outfit", "jetbrains-mono", "geist", "geist-mono", "lora", "merriweather", "playfair-display", "noto-serif", "roboto-slab", "oxanium", "manrope", "space-grotesk", "montserrat", "ibm-plex-sans", "source-sans-3", "instrument-sans"];
+declare const PRESET_FONT_HEADINGS: readonly ["inherit", "inter", "noto-sans", "nunito-sans", "figtree", "roboto", "raleway", "dm-sans", "public-sans", "outfit", "jetbrains-mono", "geist", "geist-mono", "lora", "merriweather", "playfair-display", "noto-serif", "roboto-slab", "oxanium", "manrope", "space-grotesk", "montserrat", "ibm-plex-sans", "source-sans-3", "instrument-sans"];
+declare const PRESET_RADII: readonly ["default", "none", "small", "medium", "large"];
+declare const PRESET_MENU_ACCENTS: readonly ["subtle", "bold"];
+declare const PRESET_MENU_COLORS: readonly ["default", "inverted", "default-translucent", "inverted-translucent"];
+type PresetConfig = {
+    style: (typeof PRESET_STYLES)[number];
+    baseColor: (typeof PRESET_BASE_COLORS)[number];
+    theme: (typeof PRESET_THEMES)[number];
+    chartColor?: (typeof PRESET_CHART_COLORS)[number];
+    iconLibrary: (typeof PRESET_ICON_LIBRARIES)[number];
+    font: (typeof PRESET_FONTS)[number];
+    fontHeading: (typeof PRESET_FONT_HEADINGS)[number];
+    radius: (typeof PRESET_RADII)[number];
+    menuAccent: (typeof PRESET_MENU_ACCENTS)[number];
+    menuColor: (typeof PRESET_MENU_COLORS)[number];
+};
+declare const DEFAULT_PRESET_CONFIG: PresetConfig;
+declare function toBase62(num: number): string;
+declare function fromBase62(str: string): number;
+declare function encodePreset(config: Partial<PresetConfig>): string;
+declare function decodePreset(code: string): PresetConfig | null;
+declare function isPresetCode(value: string): boolean;
+declare function isValidPreset(code: string): boolean;
+declare function generateRandomConfig(): PresetConfig;
+declare function generateRandomPreset(): string;
+
+export { DEFAULT_PRESET_CONFIG, PRESET_BASES, PRESET_BASE_COLORS, PRESET_CHART_COLORS, PRESET_FONTS, PRESET_FONT_HEADINGS, PRESET_ICON_LIBRARIES, PRESET_MENU_ACCENTS, PRESET_MENU_COLORS, PRESET_RADII, PRESET_STYLES, PRESET_THEMES, type PresetConfig, V1_CHART_COLOR_MAP, decodePreset, encodePreset, fromBase62, generateRandomConfig, generateRandomPreset, isPresetCode, isValidPreset, toBase62 };
