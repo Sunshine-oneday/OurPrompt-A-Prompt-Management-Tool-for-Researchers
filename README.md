@@ -70,11 +70,11 @@
 
 ### Windows
 
-下载并运行 `OurPrompt-v1.0.1-windows-x64-setup.exe` 即可。
+下载并运行 `OurPrompt-v1.0.2-windows-x64-setup.exe` 即可。
 
 ### macOS
 
-下载并安装 `OurPrompt-v1.0.1-macos-universal.dmg` 后，首次运行前执行：
+下载并安装 `OurPrompt-v1.0.2-macos-universal.dmg` 后，首次运行前执行：
 
 ```bash
 xcode-select --install
@@ -84,11 +84,11 @@ xattr -cr /Applications/OurPrompt.app
 
 ### Linux
 
-下载 `OurPrompt-v1.0.1-linux-x64.AppImage`，赋予执行权限后运行：
+下载 `OurPrompt-v1.0.2-linux-x64.AppImage`，赋予执行权限后运行：
 
 ```bash
-chmod +x OurPrompt-v1.0.1-linux-x64.AppImage
-./OurPrompt-v1.0.1-linux-x64.AppImage
+chmod +x OurPrompt-v1.0.2-linux-x64.AppImage
+./OurPrompt-v1.0.2-linux-x64.AppImage
 ```
 
 ---

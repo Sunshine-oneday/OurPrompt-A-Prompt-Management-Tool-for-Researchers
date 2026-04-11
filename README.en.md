@@ -68,11 +68,11 @@ If you only want to use the app (no development), download the proper package fr
 
 ### Windows
 
-Run `OurPrompt-v1.0.1-windows-x64-setup.exe`.
+Run `OurPrompt-v1.0.2-windows-x64-setup.exe`.
 
 ### macOS
 
-Install `OurPrompt-v1.0.1-macos-universal.dmg`, then run:
+Install `OurPrompt-v1.0.2-macos-universal.dmg`, then run:
 
 ```bash
 xcode-select --install
@@ -83,8 +83,8 @@ xattr -cr /Applications/OurPrompt.app
 ### Linux
 
 ```bash
-chmod +x OurPrompt-v1.0.1-linux-x64.AppImage
-./OurPrompt-v1.0.1  -linux-x64.AppImage
+chmod +x OurPrompt-v1.0.2-linux-x64.AppImage
+./OurPrompt-v1.0.2  -linux-x64.AppImage
 ```
 
 ---
