@@ -2166,8 +2166,8 @@ export default function App() {
 
       {/* Editor Dialog */}
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent className="sm:max-w-[640px] p-0 overflow-hidden border-none shadow-2xl rounded-xl">
-          <div className="p-8">
+        <DialogContent className="sm:max-w-[640px] p-0 overflow-hidden border-none shadow-2xl rounded-xl max-h-[90vh] flex flex-col">
+          <div className="p-8 overflow-y-auto flex-1 min-h-0">
             <DialogHeader className="mb-6">
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-4 h-4 text-amber-500" />
@@ -2214,7 +2214,7 @@ export default function App() {
                   placeholder={t.promptPlaceholder}
                   value={editorContent}
                   onChange={(e) => setEditorContent(e.target.value)}
-                  className="min-h-[240px] bg-[#F5F5F5] border-none focus-visible:ring-1 focus-visible:ring-[#1A1A1A] font-mono text-[13px] leading-relaxed p-4"
+                  className="field-sizing-fixed min-h-[240px] max-h-[45vh] overflow-y-auto bg-[#F5F5F5] border-none focus-visible:ring-1 focus-visible:ring-[#1A1A1A] font-mono text-[13px] leading-relaxed p-4"
                 />
               </div>
             </div>
