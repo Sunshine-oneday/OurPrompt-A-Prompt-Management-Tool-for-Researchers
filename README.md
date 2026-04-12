@@ -134,3 +134,10 @@ git push origin <your-branch>
 ## ⭐ 支持一下
 
 如果对你有帮助，欢迎点一个 Star ⭐
+
+---
+
+开源万岁  
+赞美太阳
+
+<img src="docs/screenshots/sunshine.png" alt="Long may the sun shine" width="420" />

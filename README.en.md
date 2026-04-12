@@ -128,3 +128,10 @@ Then click **Create Pull Request**.
 ## ⭐ Support
 
 If this project helps you, a Star is appreciated.
+
+---
+
+Long live open source  
+Praise the sun
+
+<img src="docs/screenshots/sunshine.png" alt="Long may the sun shine" width="420" />
