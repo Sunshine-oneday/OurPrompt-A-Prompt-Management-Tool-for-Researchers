@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
+    "tauri": "tauri",
     "desktop:dev": "tauri dev",
     "desktop:build": "tauri build"
   },
