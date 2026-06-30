@@ -98,7 +98,11 @@ function normalizeCategory(category: Category): Category {
   const defaultCategory = getDefaultCategory(normalizedId);
 
   if (defaultCategory) {
-    return { ...defaultCategory };
+    return {
+      ...defaultCategory,
+      ...category,
+      id: normalizedId,
+    };
   }
 
   return {
@@ -115,8 +119,10 @@ function mergeDefaultCategories(savedCategories: Category[]): Category[] {
   const categoriesWithCanonicalIds = normalizedCategories.map(category => {
     const canonicalId = defaultCategoryNameMap.get(category.name.trim().toLowerCase());
     if (canonicalId) {
-      const defaultCategory = getDefaultCategory(canonicalId);
-      if (defaultCategory) return { ...defaultCategory };
+      return normalizeCategory({
+        ...category,
+        id: canonicalId,
+      });
     }
 
     return category;
@@ -498,8 +504,28 @@ export default function App() {
     return saved === 'en' ? 'en' : 'zh';
   });
   const theme: string = 'light';
-  const [deletedPrompts, setDeletedPrompts] = useState<DeletedPrompt[]>(() => []);
-  const [deletedCategories, setDeletedCategories] = useState<DeletedCategory[]>(() => []);
+  const [deletedBuiltInPromptIds, setDeletedBuiltInPromptIds] = useState<string[]>(() => (
+    parseStoredJson<string[]>(
+      localStorage.getItem(STORAGE_KEYS.deletedBuiltInPrompts),
+      [],
+    )
+  ));
+  const [deletedPrompts, setDeletedPrompts] = useState<DeletedPrompt[]>(() => (
+    parseStoredJson<DeletedPrompt[]>(
+      localStorage.getItem(STORAGE_KEYS.deletedPrompts),
+      [],
+    ).map(prompt => ({
+      ...prompt,
+      category: normalizeCategoryId(prompt.category),
+      originalCategory: normalizeCategory(prompt.originalCategory),
+    }))
+  ));
+  const [deletedCategories, setDeletedCategories] = useState<DeletedCategory[]>(() => (
+    parseStoredJson<DeletedCategory[]>(
+      localStorage.getItem(STORAGE_KEYS.deletedCategories),
+      [],
+    ).map(category => normalizeCategory(category) as DeletedCategory)
+  ));
   const [prompts, setPrompts] = useState<Prompt[]>(() => {
     const customPrompts = parseStoredJson<Prompt[]>(
       localStorage.getItem(STORAGE_KEYS.customPrompts),
@@ -519,7 +545,7 @@ export default function App() {
     ) {
       return buildPromptState(
         customPrompts,
-        [],
+        deletedBuiltInPromptIds,
         orderedPromptIds,
       );
     }
@@ -536,7 +562,7 @@ export default function App() {
 
     return buildPromptState(
       migratedCustomPrompts,
-      [],
+      deletedBuiltInPromptIds,
       migratedPromptOrder,
     );
   });
@@ -638,20 +664,16 @@ export default function App() {
   }, [prompts]);
 
   useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.deletedBuiltInPrompts, JSON.stringify(deletedBuiltInPromptIds));
+  }, [deletedBuiltInPromptIds]);
+
+  useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.deletedPrompts, JSON.stringify(deletedPrompts));
   }, [deletedPrompts]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.deletedCategories, JSON.stringify(deletedCategories));
   }, [deletedCategories]);
-
-  useEffect(() => {
-    localStorage.removeItem(STORAGE_KEYS.deletedBuiltInPrompts);
-    localStorage.removeItem(STORAGE_KEYS.deletedPrompts);
-    localStorage.removeItem(STORAGE_KEYS.deletedCategories);
-    setDeletedPrompts([]);
-    setDeletedCategories([]);
-  }, []);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.language, language);
@@ -745,8 +767,12 @@ export default function App() {
     const deletedAt = Date.now();
     const category = categoryToDelete;
     const promptsToTrash = prompts.filter(prompt => prompt.category === category.id);
+    const builtInPromptIdsToTrash = promptsToTrash
+      .filter(prompt => prompt.isDefault)
+      .map(prompt => prompt.id);
 
     setDeletedCategories(prev => [...prev.filter(item => item.id !== category.id), { ...category, deletedAt }]);
+    setDeletedBuiltInPromptIds(prev => Array.from(new Set([...prev, ...builtInPromptIdsToTrash])));
     setDeletedPrompts(prev => [
       ...prev.filter(prompt => !promptsToTrash.some(item => item.id === prompt.id)),
       ...promptsToTrash.map(prompt => ({
@@ -838,6 +864,9 @@ export default function App() {
         originalCategory,
       },
     ]);
+    if (promptToDelete.isDefault) {
+      setDeletedBuiltInPromptIds(prev => Array.from(new Set([...prev, promptToDelete.id])));
+    }
     setPrompts(prev => prev.filter(p => p.id !== promptToDelete.id));
     setPromptToDelete(null);
     toast.success(t.deleted);
@@ -856,6 +885,7 @@ export default function App() {
       icon: category.icon,
       color: category.color,
     }));
+    setDeletedBuiltInPromptIds(prev => prev.filter(id => !restoredPrompts.some(prompt => prompt.isDefault && prompt.id === id)));
     setDeletedCategories(prev => prev.filter(item => item.id !== category.id));
     setDeletedPrompts(prev => prev.filter(prompt => prompt.originalCategory.id !== category.id));
     setPrompts(prev => [...prev, ...restoredPrompts]);
@@ -871,6 +901,9 @@ export default function App() {
     }
 
     setDeletedPrompts(prev => prev.filter(prompt => prompt.id !== deletedPrompt.id));
+    if (deletedPrompt.isDefault) {
+      setDeletedBuiltInPromptIds(prev => prev.filter(id => id !== deletedPrompt.id));
+    }
     const { deletedAt, originalCategory, ...restoredPrompt } = deletedPrompt;
     setPrompts(prev => [
       ...prev,
@@ -1198,7 +1231,7 @@ export default function App() {
           <span className={`text-[11px] font-medium ${theme === 'dark' ? 'text-[#C8D0E5]' : 'text-[#666]'}`}>OurPrompt</span>
         </div>
         <div className="flex items-center gap-4">
-          <Badge variant="outline" className={`h-4 text-[9px] px-1.5 font-bold uppercase ${theme === 'dark' ? 'border-[#36405A] text-[#90A0C8]' : 'border-[#E5E5E5] text-[#A1A1A1]'}`}>v1.0.0 Stable</Badge>
+          <Badge variant="outline" className={`h-4 text-[9px] px-1.5 font-bold uppercase ${theme === 'dark' ? 'border-[#36405A] text-[#90A0C8]' : 'border-[#E5E5E5] text-[#A1A1A1]'}`}>v1.0.3 Stable</Badge>
         </div>
       </div>
 
