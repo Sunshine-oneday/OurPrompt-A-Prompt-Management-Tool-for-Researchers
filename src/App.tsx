@@ -514,8 +514,7 @@ export default function App() {
     }
 
     localStorage.setItem(STORAGE_KEYS.languageMode, 'auto');
-    const systemLanguage = navigator.language || navigator.languages?.[0] || '';
-    return systemLanguage.toLowerCase().startsWith('zh') ? 'zh' : 'en';
+    return 'en';
   });
 
   const chooseLanguage = (next: Language) => {

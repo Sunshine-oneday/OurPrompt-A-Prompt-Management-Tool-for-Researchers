@@ -48,7 +48,7 @@ Built in with **26 curated templates**, ready to use.
 
 ## 🌐 Language Switching
 
-On first launch, the interface follows your system language: Chinese for Chinese locales and English otherwise. You can still switch between **Chinese / English** in **Settings** in the left sidebar.
+The interface defaults to English on first launch. You can switch to Chinese in **Settings** in the left sidebar.
 
 When switched to English:
 
@@ -68,11 +68,11 @@ If you only want to use the app (no development), download the proper package fr
 
 ### Windows
 
-Run `OurPrompt-v1.0.6-windows-x64-setup.exe`.
+Run `OurPrompt-v1.0.7-windows-x64-setup.exe`.
 
 ### macOS
 
-Install `OurPrompt-v1.0.6-macos-universal.dmg`, then run:
+Install `OurPrompt-v1.0.7-macos-universal.dmg`, then run:
 
 ```bash
 xcode-select --install
@@ -83,8 +83,8 @@ xattr -cr /Applications/OurPrompt.app
 ### Linux
 
 ```bash
-chmod +x OurPrompt-v1.0.6-linux-x64.AppImage
-./OurPrompt-v1.0.6-linux-x64.AppImage
+chmod +x OurPrompt-v1.0.7-linux-x64.AppImage
+./OurPrompt-v1.0.7-linux-x64.AppImage
 ```
 
 ---

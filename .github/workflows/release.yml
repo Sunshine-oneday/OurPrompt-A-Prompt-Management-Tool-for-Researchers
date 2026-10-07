@@ -65,7 +65,7 @@ jobs:
           releaseName: OurPrompt ${{ github.ref_name }}
           releaseBody: |
             ## Changes
-            - Default the interface to the system language (Chinese for Chinese locales, English otherwise); manual selection remains available.
+            - Default the interface to English; Chinese remains available in Settings.
             - Fix the AppImage .DirIcon symlink by using Tauri CLI 2.12.1.
             - License original project code under PolyForm Noncommercial 1.0.0.
           releaseDraft: true

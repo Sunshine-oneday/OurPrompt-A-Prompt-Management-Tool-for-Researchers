@@ -51,7 +51,7 @@
 
 ## 🌐 中英文切换
 
-首次启动会根据系统语言自动选择界面语言：中文系统默认中文，其他系统默认 English。也可以在左侧底部的 **设置（Settings）** 中手动切换。  
+首次启动默认使用 English。也可以在左侧底部的 **设置（Settings）** 中手动切换为中文。  
 切换到英文后：
 
 - 内置分类名称会显示为英文
@@ -70,11 +70,11 @@
 
 ### Windows
 
-下载并运行 `OurPrompt-v1.0.6-windows-x64-setup.exe` 即可。
+下载并运行 `OurPrompt-v1.0.7-windows-x64-setup.exe` 即可。
 
 ### macOS
 
-下载并安装 `OurPrompt-v1.0.6-macos-universal.dmg` 后，首次运行前执行：
+下载并安装 `OurPrompt-v1.0.7-macos-universal.dmg` 后，首次运行前执行：
 
 ```bash
 xcode-select --install
@@ -84,11 +84,11 @@ xattr -cr /Applications/OurPrompt.app
 
 ### Linux
 
-下载 `OurPrompt-v1.0.6-linux-x64.AppImage`，赋予执行权限后运行：
+下载 `OurPrompt-v1.0.7-linux-x64.AppImage`，赋予执行权限后运行：
 
 ```bash
-chmod +x OurPrompt-v1.0.6-linux-x64.AppImage
-./OurPrompt-v1.0.6-linux-x64.AppImage
+chmod +x OurPrompt-v1.0.7-linux-x64.AppImage
+./OurPrompt-v1.0.7-linux-x64.AppImage
 ```
 
 ---
