@@ -61,9 +61,9 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: OurPrompt ${{ github.ref_name }}
           releaseBody: |
-            ## Fixes
-            - Fixed category icon/color changes being reset after restarting the app.
-            - Fixed recycle bin contents being cleared after restarting the app.
-            - Fixed deleted built-in prompts reappearing after restart.
+            ## Changes
+            - Default the interface to the system language (Chinese for Chinese locales, English otherwise); manual selection remains available.
+            - Include a relocatable root .DirIcon in the AppImage.
+            - License original project code under PolyForm Noncommercial 1.0.0.
           releaseDraft: true
           prerelease: false
