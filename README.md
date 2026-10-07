@@ -51,7 +51,7 @@
 
 ## 🌐 中英文切换
 
-在左侧底部点击 **设置（Settings）**，即可在 **中文 / English** 之间切换界面语言。  
+首次启动会根据系统语言自动选择界面语言：中文系统默认中文，其他系统默认 English。也可以在左侧底部的 **设置（Settings）** 中手动切换。  
 切换到英文后：
 
 - 内置分类名称会显示为英文
@@ -70,11 +70,11 @@
 
 ### Windows
 
-下载并运行 `OurPrompt-v1.0.3-windows-x64-setup.exe` 即可。
+下载并运行 `OurPrompt-v1.0.4-windows-x64-setup.exe` 即可。
 
 ### macOS
 
-下载并安装 `OurPrompt-v1.0.3-macos-universal.dmg` 后，首次运行前执行：
+下载并安装 `OurPrompt-v1.0.4-macos-universal.dmg` 后，首次运行前执行：
 
 ```bash
 xcode-select --install
@@ -84,11 +84,11 @@ xattr -cr /Applications/OurPrompt.app
 
 ### Linux
 
-下载 `OurPrompt-v1.0.3-linux-x64.AppImage`，赋予执行权限后运行：
+下载 `OurPrompt-v1.0.4-linux-x64.AppImage`，赋予执行权限后运行：
 
 ```bash
-chmod +x OurPrompt-v1.0.3-linux-x64.AppImage
-./OurPrompt-v1.0.3-linux-x64.AppImage
+chmod +x OurPrompt-v1.0.4-linux-x64.AppImage
+./OurPrompt-v1.0.4-linux-x64.AppImage
 ```
 
 ---
@@ -141,3 +141,9 @@ git push origin <your-branch>
 赞美太阳
 
 <img src="docs/screenshots/sunshine.png" alt="Long may the sun shine" width="420" />
+
+
+## 许可证
+
+OurPrompt 原创源代码及项目材料采用 PolyForm Noncommercial License 1.0.0。该许可证允许非商业用途下修改和再分发，不授予商业使用权。第三方依赖与内容仍遵循各自许可证。详见 [LICENSE](LICENSE)。
+

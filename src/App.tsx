@@ -154,6 +154,7 @@ const STORAGE_KEYS = {
   promptOrder: 'prompthub_prompt_order',
   categories: 'prompthub_categories',
   language: 'prompthub_language',
+  languageMode: 'prompthub_language_mode',
   theme: 'prompthub_theme',
 } as const;
 
@@ -501,8 +502,26 @@ export default function App() {
   const promptScrollAreaRef = useRef<HTMLDivElement | null>(null);
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.language);
-    return saved === 'en' ? 'en' : 'zh';
+    const mode = localStorage.getItem(STORAGE_KEYS.languageMode);
+    if (mode === 'manual' && (saved === 'en' || saved === 'zh')) return saved;
+
+    // Preserve English choices made in older versions. Older versions also
+    // stored the default Chinese value, so it cannot be distinguished from
+    // an explicit choice; use the system locale for those installations.
+    if (mode === null && saved === 'en') {
+      localStorage.setItem(STORAGE_KEYS.languageMode, 'manual');
+      return 'en';
+    }
+
+    localStorage.setItem(STORAGE_KEYS.languageMode, 'auto');
+    const systemLanguage = navigator.language || navigator.languages?.[0] || '';
+    return systemLanguage.toLowerCase().startsWith('zh') ? 'zh' : 'en';
   });
+
+  const chooseLanguage = (next: Language) => {
+    localStorage.setItem(STORAGE_KEYS.languageMode, 'manual');
+    setLanguage(next);
+  };
   const theme: string = 'light';
   const [deletedBuiltInPromptIds, setDeletedBuiltInPromptIds] = useState<string[]>(() => (
     parseStoredJson<string[]>(
@@ -1720,14 +1739,14 @@ export default function App() {
             <div className="grid grid-cols-2 gap-3">
               <Button
                 variant={language === 'zh' ? 'default' : 'outline'}
-                onClick={() => setLanguage('zh')}
+                onClick={() => chooseLanguage('zh')}
                 className={language === 'zh' ? 'bg-[#1A1A1A] hover:bg-[#333] text-white' : ''}
               >
                 {t.chinese}
               </Button>
               <Button
                 variant={language === 'en' ? 'default' : 'outline'}
-                onClick={() => setLanguage('en')}
+                onClick={() => chooseLanguage('en')}
                 className={language === 'en' ? 'bg-[#1A1A1A] hover:bg-[#333] text-white' : ''}
               >
                 {t.english}

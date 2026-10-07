@@ -48,7 +48,7 @@ Built in with **26 curated templates**, ready to use.
 
 ## 🌐 Language Switching
 
-Open **Settings** in the left sidebar and switch between **Chinese / English**.
+On first launch, the interface follows your system language: Chinese for Chinese locales and English otherwise. You can still switch between **Chinese / English** in **Settings** in the left sidebar.
 
 When switched to English:
 
@@ -68,11 +68,11 @@ If you only want to use the app (no development), download the proper package fr
 
 ### Windows
 
-Run `OurPrompt-v1.0.3-windows-x64-setup.exe`.
+Run `OurPrompt-v1.0.4-windows-x64-setup.exe`.
 
 ### macOS
 
-Install `OurPrompt-v1.0.3-macos-universal.dmg`, then run:
+Install `OurPrompt-v1.0.4-macos-universal.dmg`, then run:
 
 ```bash
 xcode-select --install
@@ -83,8 +83,8 @@ xattr -cr /Applications/OurPrompt.app
 ### Linux
 
 ```bash
-chmod +x OurPrompt-v1.0.3-linux-x64.AppImage
-./OurPrompt-v1.0.3-linux-x64.AppImage
+chmod +x OurPrompt-v1.0.4-linux-x64.AppImage
+./OurPrompt-v1.0.4-linux-x64.AppImage
 ```
 
 ---
@@ -135,3 +135,9 @@ Long live open source
 Praise the sun
 
 <img src="docs/screenshots/sunshine.png" alt="Long may the sun shine" width="420" />
+
+
+## License
+
+Original OurPrompt source code and original project materials are available under the PolyForm Noncommercial License 1.0.0. Noncommercial users may modify and redistribute them under the license terms; commercial use is not granted. Third-party dependencies and content remain under their own licenses. See [LICENSE](LICENSE).
+

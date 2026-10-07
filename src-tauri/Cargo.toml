@@ -1,6 +1,6 @@
 [package]
 name = "ourprompt"
-version = "1.0.3"
+version = "1.0.4"
 description = "OurPrompt desktop app built with Tauri"
 authors = ["OurPrompt"]
 edition = "2021"
