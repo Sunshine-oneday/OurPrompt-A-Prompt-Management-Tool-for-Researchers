@@ -53,6 +53,9 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      - name: Update Tauri CLI
+        run: npm install --no-save --package-lock=false @tauri-apps/cli@2.12.1
+
       - name: Build and upload release assets
         uses: tauri-apps/tauri-action@v0
         env:
@@ -63,7 +66,7 @@ jobs:
           releaseBody: |
             ## Changes
             - Default the interface to the system language (Chinese for Chinese locales, English otherwise); manual selection remains available.
-            - Include a relocatable root .DirIcon in the AppImage.
+            - Fix the AppImage .DirIcon symlink by using Tauri CLI 2.12.1.
             - License original project code under PolyForm Noncommercial 1.0.0.
           releaseDraft: true
           prerelease: false
